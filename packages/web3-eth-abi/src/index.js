@@ -33,6 +33,7 @@ var SolidityTypeUInt = require('./types/uint');
 var SolidityTypeDynamicBytes = require('./types/dynamicbytes');
 var SolidityTypeString = require('./types/string');
 var SolidityTypeBytes = require('./types/bytes');
+var SolidityTypeDecimal10 = require('./types/decimal10');
 
 var isDynamic = function (solidityType, type) {
     return solidityType.isDynamicType(type) ||
@@ -402,7 +403,8 @@ var coder = new ABICoder([
     new SolidityTypeUInt(),
     new SolidityTypeDynamicBytes(),
     new SolidityTypeBytes(),
-    new SolidityTypeString()
+    new SolidityTypeString(),
+    new SolidityTypeDecimal10()
 ]);
 
 module.exports = coder;

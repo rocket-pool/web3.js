@@ -126,6 +126,18 @@ var formatInputBool = function (value) {
     return new SolidityParam(result);
 };
 
+/**
+ * Formats input value to byte representation of decimal10
+ *
+ * @method formatInputDecimal10
+ * @param {String|Number|BN} value that needs to be formatted
+ * @returns {SolidityParam}
+ */
+var formatInputDecimal10 = function (value) {
+    var val_to_encode = (value * Math.pow(10, 10)) % Math.pow(2, 256);
+    return formatInputInt(val_to_encode);
+};
+
 
 /**
  * Check if input value is negative
@@ -271,12 +283,28 @@ var formatOutputAddress = function (param, name) {
     return utils.toChecksumAddress("0x" + value.slice(value.length - 40, value.length));
 };
 
+/**
+ * Should be used to format output decimal10
+ *
+ * @method formatOutputDecimal10
+ * @param {SolidityParam} param
+ * @param {String} name type name
+ * @returns {BN} number
+ */
+var formatOutputDecimal10 = function (param, name) {
+    var number = formatOutputInt(param);
+    var result = number / Math.pow(10, 10);
+    return result;
+};
+
+
 module.exports = {
     formatInputInt: formatInputInt,
     formatInputBytes: formatInputBytes,
     formatInputDynamicBytes: formatInputDynamicBytes,
     formatInputString: formatInputString,
     formatInputBool: formatInputBool,
+    formatInputDecimal10: formatInputDecimal10,
     formatOutputInt: formatOutputInt,
     formatOutputUInt: formatOutputUInt,
     formatOutputBool: formatOutputBool,
@@ -284,5 +312,6 @@ module.exports = {
     formatOutputDynamicBytes: formatOutputDynamicBytes,
     formatOutputString: formatOutputString,
     formatOutputAddress: formatOutputAddress,
+    formatOutputDecimal10: formatOutputDecimal10,
     toTwosComplement: utils.toTwosComplement
 };
