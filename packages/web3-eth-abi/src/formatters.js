@@ -127,14 +127,16 @@ var formatInputBool = function (value) {
 };
 
 /**
- * Formats input value to byte representation of decimal10
+ * Formats input value to byte representation of decimal
  *
- * @method formatInputDecimal10
+ * @method formatInputDecimal
  * @param {String|Number|BN} value that needs to be formatted
  * @returns {SolidityParam}
  */
-var formatInputDecimal10 = function (value) {
-    var val_to_encode = (value * Math.pow(10, 10)) % Math.pow(2, 256);
+var formatInputDecimal = function (value, name) {
+    var decimals = name.match(/\d+$/);
+    decimals = decimals ? parseInt(decimals[0]) : 10;
+    var val_to_encode = (value * Math.pow(10, decimals)) % Math.pow(2, 256);
     return formatInputInt(val_to_encode);
 };
 
@@ -284,16 +286,18 @@ var formatOutputAddress = function (param, name) {
 };
 
 /**
- * Should be used to format output decimal10
+ * Should be used to format output decimal
  *
- * @method formatOutputDecimal10
+ * @method formatOutputDecimal
  * @param {SolidityParam} param
  * @param {String} name type name
  * @returns {BN} number
  */
-var formatOutputDecimal10 = function (param, name) {
+var formatOutputDecimal = function (param, name) {
+    var decimals = name.match(/\d+$/);
+    decimals = decimals ? parseInt(decimals[0]) : 10;
     var number = formatOutputInt(param);
-    var result = number / Math.pow(10, 10);
+    var result = number / Math.pow(10, decimals);
     return result;
 };
 
@@ -304,7 +308,7 @@ module.exports = {
     formatInputDynamicBytes: formatInputDynamicBytes,
     formatInputString: formatInputString,
     formatInputBool: formatInputBool,
-    formatInputDecimal10: formatInputDecimal10,
+    formatInputDecimal: formatInputDecimal,
     formatOutputInt: formatOutputInt,
     formatOutputUInt: formatOutputUInt,
     formatOutputBool: formatOutputBool,
@@ -312,6 +316,6 @@ module.exports = {
     formatOutputDynamicBytes: formatOutputDynamicBytes,
     formatOutputString: formatOutputString,
     formatOutputAddress: formatOutputAddress,
-    formatOutputDecimal10: formatOutputDecimal10,
+    formatOutputDecimal: formatOutputDecimal,
     toTwosComplement: utils.toTwosComplement
 };
